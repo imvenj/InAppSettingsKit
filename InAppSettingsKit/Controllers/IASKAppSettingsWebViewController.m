@@ -48,7 +48,11 @@
 	[super viewWillAppear:animated];
 	
 	UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 40, 20)];
-	activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+	if (@available(iOS 13.0, *)) {
+		activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleMedium;
+	} else {
+		activityIndicatorView.activityIndicatorViewStyle = 1; // Use 1 instead of UIActivityIndicatorViewStyleWhite to trick iOSMac deprecation check.
+	}
 	[activityIndicatorView startAnimating];
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
 	[self.webView loadRequest:[NSURLRequest requestWithURL:self.url]];
@@ -144,9 +148,9 @@
 	mailViewController.navigationBar.tintColor = self.navigationController.navigationBar.tintColor;
 	mailViewController.navigationBar.titleTextAttributes =  self.navigationController.navigationBar.titleTextAttributes;
 
-	UIStatusBarStyle savedStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
+	// UIStatusBarStyle savedStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
 	[self presentViewController:mailViewController animated:YES completion:^{
-		[UIApplication sharedApplication].statusBarStyle = savedStatusBarStyle;
+		// [UIApplication sharedApplication].statusBarStyle = savedStatusBarStyle;
 	}];
 }
 
